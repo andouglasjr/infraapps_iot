@@ -39,7 +39,7 @@ services:
 - `mosquitto.conf` (configuração do broker)
 - `pwfile` (arquivo de senhas para autenticação)
 
-📘 Referência: [sukesh-ak/setup-mosquitto-with-docker](https://github.com/sukesh-ak/setup-mosquitto-with-docker)
+📘 Referência: Para saber mais sobre a geração da senha acesse o github que me baseei para a configuração do Mosquitto: [sukesh-ak/setup-mosquitto-with-docker](https://github.com/sukesh-ak/setup-mosquitto-with-docker)
 
 ---
 
