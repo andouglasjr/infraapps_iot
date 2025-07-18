@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+
+  influxdb:
+    image: influxdb:2.7
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=iotlab
+      - DOCKER_INFLUXDB_INIT_BUCKET=sensores
+      - DOCKER_INFLUXDB_INIT_TOKEN=sAdYonhPTlZHeL53ROLIObA3kjROf8x4lg4tLUyB_2IPO9ak_TRYKBIWMTiMtZxKn06PUu8zelmVnlLcWLDMcw==
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+
+  
+  telegraf:
+    image: telegraf:1.30
+    depends_on:
+      - influxdb
+      - mosquitto
+    volumes:
+      - C:/Users/andou/Documents/Docker/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    environment:
+      - HOST_PROC=/host/proc
+      - HOST_SYS=/host/sys
+
+  grafana:
+    image: grafana/grafana:10.4.1
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - influxdb
+
+volumes:
+  influxdb-data:
+  grafana-data:
